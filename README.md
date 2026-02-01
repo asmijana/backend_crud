@@ -57,9 +57,116 @@ This mirrors the structure of real auth (e.g., JWT-based “current user”) wit
 │  ├─ models.py           # SQLModel DB models (User, Experiment)
 │  ├─ schemas.py          # Request/response schemas
 │  ├─ deps.py             # Shared dependencies (get_current_user)
+│  ├─ test_experiments.py # API tests (users + experiments + auth behavior)
 │  └─ api/
 │     ├─ __init__.py
 │     └─ experiments.py   # /experiments endpoints
 │     └─ users.py         # /users endpoints
-└─ test_experiments.py    # API tests (users + experiments + auth behavior)
-   
+├─ experiments.db         # Data stored
+└─ requirements.txt       # Requirements listed
+```
+
+## How to Run
+
+After cloning, install dependencies:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate      # macOS / Linux
+pip install -r requirements.txt
+```
+For running the API, run the following at the project root:
+
+```bash
+uvicorn app.main:app --reload
+```
+The API will be available at:
+
+Root: http://127.0.0.1:8000/
+Interactive docs (Swagger UI): http://127.0.0.1:8000/docs
+
+## Usage Examples
+
+### 1. Creating a user
+Endpoint: POST/users
+
+```bash
+curl -X POST "http://127.0.0.1:8000/users/" \
+  -H "Content-Type: application/json" \
+  -d '{
+        "email": "alpha@example.com",
+        "full_name": "Alpha Zenith"
+      }'
+```
+Expected Response:
+
+```bash
+{
+  "id": 1,
+  "email": "alpha@example.com",
+  "full_name": "Alpha Zenith"
+}
+```
+
+### 2. Creating an experiment for that user
+Endpoint: POST/experiments
+
+```bash
+curl -X POST "http://127.0.0.1:8000/experiments/" \
+  -H "Content-Type: application/json" \
+  -H "X-User-Id: 1" \
+  -d '{
+        "name": "CO2RR test",
+        "description": "Screening catalysts for CO2 reduction"
+      }'
+```
+Expected Response:
+
+```bash
+{
+  "id": 1,
+  "name": "CO2RR test",
+  "description": "Screening catalysts for CO2 reduction",
+  "owner_id": 1
+}
+```
+
+### 3. List experiments for the current user
+Endpoint: GET/experiments
+
+```bash
+{
+  "id": 1,
+  "name": "CO2RR test",
+  "description": "Screening catalysts for CO2 reduction",
+  "owner_id": 1
+}
+```
+### 4. Attempting to access experiments as another user
+
+First creating another user
+```bash
+curl -X POST "http://127.0.0.1:8000/users/" \
+  -H "Content-Type: application/json" \
+  -d '{
+        "email": "beta@example.com",
+        "full_name": "Beta Yan"
+      }'
+```
+Then attempting to access the experiments of another user
+```bash
+curl -X GET "http://127.0.0.1:8000/experiments/1" \
+  -H "X-User-Id: 2"
+```
+Expected Response:
+
+```bash
+{
+  "detail": "Not allowed to access this experiment"
+}
+```
+
+## Author
+
+Created by Asmita Jana (asmitajana[at]gmail[dot]com)  
+This project was built to experiment with backend features
