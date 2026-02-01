@@ -1,6 +1,3 @@
-# backend_crud
-Playing around with backend CRUD operations
-
 # Experiment Tracking API
 
 A small but production-style backend service for tracking experiments and their owners.
