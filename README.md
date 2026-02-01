@@ -18,6 +18,7 @@ Built with **FastAPI**, **SQLModel**, and **SQLite**, this project demonstrates:
   - `POST /users` – create a new user
   - `GET /users` – list all users
   - `GET /users/{id}` – fetch a single user
+  - `DELETE /users/{id}` – delete a single user
 
 - **Experiments**
   - `POST /experiments/` – create an experiment for the current user
@@ -62,6 +63,8 @@ This mirrors the structure of real auth (e.g., JWT-based “current user”) wit
 │     ├─ __init__.py
 │     └─ experiments.py   # /experiments endpoints
 │     └─ users.py         # /users endpoints
+├─ README.md
+├─ LICENSE
 ├─ experiments.db         # Data stored
 └─ requirements.txt       # Requirements listed
 ```
