@@ -80,10 +80,10 @@ For running the API, run the following at the project root:
 ```bash
 uvicorn app.main:app --reload
 ```
-The API will be available at:
+The API will be available at:  
 
-Root: http://127.0.0.1:8000/
-Interactive docs (Swagger UI): http://127.0.0.1:8000/docs
+Root: http://127.0.0.1:8000/  
+Interactive docs (Swagger UI): http://127.0.0.1:8000/docs  
 
 ## Usage Examples
 
@@ -164,6 +164,23 @@ Expected Response:
 {
   "detail": "Not allowed to access this experiment"
 }
+```
+## Running Tests
+
+Tests use an in-memory SQLite database and override the app’s DB session dependency, so they’re fully isolated from your local experiments.db.
+
+From the project root:
+```bash
+pytest
+```
+
+You should see output similar to:
+```bash
+==================== test session starts ====================
+collected X items
+
+tests/test_experiments.py ......
+===================== X passed in Y.s =======================
 ```
 
 ## Author
